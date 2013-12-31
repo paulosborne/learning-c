@@ -15,10 +15,12 @@ int Monster_attack(void *self, int damage)
     monster->hit_points -= damage;
 
     if(monster->hit_points > 0) {
-        printf("It is still alive.\n");
+        printf("It is still alive and has %dhp remaining\n.",
+                monster->hit_points);
         return 0;
     } else {
-        printf("It is dead!\n");
+        printf("It is dead! it drops %d gold coins\n",
+                monster->loot);
         return 1;
     }
 }
@@ -27,6 +29,7 @@ int Monster_init(void *self)
 {
     Monster *monster = self;
     monster->hit_points = 10;
+    monster->loot = 100;
     return 1;
 }
 
@@ -149,7 +152,7 @@ int process_input(Map *game)
     char ch = getchar();
     getchar();
 
-    int damage = rand() % 4;
+    int damage = rand() % 10;
 
     switch(ch) {
         case 113:

@@ -5,6 +5,8 @@
 
 struct Monster {
     Object proto;
+
+    int loot;
     int hit_points;
 };
 
