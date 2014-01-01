@@ -5,12 +5,29 @@
 #include <time.h>
 #include "ex19.h"
 
+int Player_init(void *self)
+{
+    Player *player = self;
+
+    player->hit_points = 100;
+    player->xp = 0;
+    player->damage = 8;
+    player->damage_multiplier = 0.3;
+
+    printf("%s entered the dungeon", player->_(description));
+
+    return 1;
+}
+
+Object PlayerProto = {
+    .init = Player_init
+};
+
 int Monster_attack(void *self, int damage)
 {
     Monster *monster = self;
 
-    printf("You attack %s for %dhp of damage\n",
-            monster->_(description), damage);
+    printf("You attack %s for %dhp of damage\n", monster->_(description), damage);
 
     monster->hit_points -= damage;
 
@@ -145,14 +162,15 @@ Object MapProto = {
     .attack = Map_attack
 };
 
-int process_input(Map *game)
+int process_input(Map *game, Player *player)
 {
     printf("\n> ");
 
     char ch = getchar();
     getchar();
 
-    int damage = rand() % 10;
+    int max_damage = player->damage + (player->damage * player->damage_multiplier);
+    int damage = rand() % max_damage;
 
     switch(ch) {
         case 113:
@@ -195,11 +213,12 @@ int main(int argc, char *argv[])
 
     // create map
     Map *game = NEW(Map, "The hall of the minotaur");
+    //create player
+    Player *player = NEW(Player, argv[1]);
 
-    printf("You enter the ");
     game->location->_(describe)(game->location);
 
-    while(process_input(game)) {
+    while(process_input(game, player)) {
     }
 
     return 0;

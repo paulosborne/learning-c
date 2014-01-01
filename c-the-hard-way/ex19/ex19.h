@@ -3,6 +3,20 @@
 
 #include "object.h"
 
+struct Player {
+    Object proto;
+
+    char *name;
+    int hit_points;
+    int xp;
+    int damage;
+    float damage_multiplier;
+};
+
+typedef struct Player Player;
+
+int Player_init(void *self);
+
 struct Monster {
     Object proto;
 
